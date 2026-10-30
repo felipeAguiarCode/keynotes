@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>Keynotes</title>
+<meta name="description" content="Keynotes interativos em HTML, organizados por tema.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#05080b;--panel:rgba(12,18,24,.78);--line:rgba(140,210,240,.16);--line-strong:rgba(140,210,240,.38);--ink:#e8f1f5;--muted:#86979f;--cyan:#4fe3ff;--coral:#e0805f;--display:'Barlow Condensed','Arial Narrow',Arial,sans-serif;--mono:'IBM Plex Mono','Courier New',monospace;--body:'Manrope',Arial,sans-serif;--ease:cubic-bezier(.22,.8,.2,1)}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+::selection{background:var(--cyan);color:var(--bg)}
+
+/* Perspective grid floor, like a tactical briefing map */
+.grid{position:fixed;inset:auto 0 0 0;height:62vh;pointer-events:none;perspective:420px;overflow:hidden;z-index:0}
+.grid::before{content:"";position:absolute;left:-50%;right:-50%;top:0;height:200%;transform:rotateX(62deg);transform-origin:top center;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:64px 64px;mask-image:linear-gradient(to bottom,transparent,black 18%,black 40%,transparent 72%);animation:fly 6s linear infinite}
+@keyframes fly{to{background-position:0 64px,0 0}}
+.glow{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(60vw 40vh at 80% -10%,rgba(79,227,255,.12),transparent 70%),radial-gradient(50vw 40vh at 0% 110%,rgba(224,128,95,.08),transparent 70%)}
+.scan{position:fixed;inset:0;pointer-events:none;z-index:3;background:repeating-linear-gradient(to bottom,rgba(255,255,255,.018) 0 1px,transparent 1px 3px)}
+
+.shell{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:28px 16px 96px}
+@media (min-width:720px){.shell{padding:40px 40px 110px}}
+
+/* Top HUD bar */
+.hud{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:14px}
+.hud b{color:var(--cyan);font-weight:500}
+.hud .live::before{content:"";display:inline-block;width:7px;height:7px;margin-right:8px;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:blink 1.6s steps(2) infinite}
+@keyframes blink{50%{opacity:.25}}
+
+.title{margin:56px 0 12px;font-family:var(--display);font-weight:800;font-size:clamp(54px,11vw,132px);line-height:.86;letter-spacing:.01em;text-transform:uppercase}
+.title span{display:block;color:transparent;-webkit-text-stroke:1px var(--line-strong)}
+.lede{max-width:560px;margin:0 0 56px;color:var(--muted);font-size:16px;line-height:1.6}
+
+/* Theme blocks */
+.theme{margin-top:44px}
+.theme__head{display:flex;align-items:baseline;gap:14px;margin-bottom:14px;font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.theme__head .idx{color:var(--accent);font-family:var(--mono);font-weight:500;letter-spacing:.08em}
+.theme__head h2{margin:0;font:inherit;color:var(--ink)}
+.theme__head::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line-strong),transparent)}
+
+/* Mission cards with slanted selection bar */
+.mission{position:relative;display:grid;grid-template-columns:auto 1fr;gap:6px 22px;align-items:start;padding:22px 20px 22px 18px;text-decoration:none;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);overflow:hidden;isolation:isolate;transition:border-color .25s var(--ease),transform .25s var(--ease)}
+.mission+.mission{margin-top:10px}
+.mission::before{content:"";position:absolute;inset:0 -30px 0 -40px;z-index:-1;background:linear-gradient(90deg,var(--accent),color-mix(in srgb,var(--accent) 55%,transparent));transform:skewX(-18deg) translateX(-104%);transition:transform .38s var(--ease)}
+.mission:hover,.mission:focus-visible{border-color:var(--accent);transform:translateX(6px);outline:none}
+.mission:hover::before,.mission:focus-visible::before{transform:skewX(-18deg) translateX(0)}
+.mission:hover *,.mission:focus-visible *{color:var(--bg)}
+.mission__code{grid-row:span 3;font-family:var(--mono);font-size:13px;color:var(--accent);padding-top:6px;letter-spacing:.06em}
+.mission__title{font-family:var(--display);font-weight:700;font-size:clamp(28px,4.4vw,40px);line-height:1;text-transform:uppercase;letter-spacing:.01em}
+.mission__desc{color:var(--muted);font-size:15px;line-height:1.55;max-width:680px}
+.mission__meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:6px;font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mission__meta .go{margin-left:auto;color:var(--accent)}
+@media (max-width:560px){.mission{grid-template-columns:1fr}.mission__code{grid-row:auto;padding-top:0}.mission__meta .go{margin-left:0}}
+
+/* Button prompts footer */
+.prompts{position:fixed;left:0;right:0;bottom:0;z-index:2;display:flex;flex-wrap:wrap;gap:8px 22px;justify-content:flex-end;align-items:center;padding:12px 16px calc(12px + env(safe-area-inset-bottom));font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:linear-gradient(to top,var(--bg) 40%,transparent)}
+.prompts kbd{display:inline-grid;place-items:center;min-width:22px;height:22px;margin-right:8px;padding:0 6px;border:1px solid var(--line-strong);font:inherit;color:var(--ink)}
+.prompts a{text-decoration:none;border-bottom:1px solid var(--line-strong)}
+.prompts a:hover,.prompts a:focus-visible{color:var(--cyan);outline:none}
+@media (max-width:560px){.prompts .key{display:none}}
+
+@media (prefers-reduced-motion:reduce){.grid::before,.hud .live::before{animation:none}.mission,.mission::before{transition:none}}
+</style>
+</head>
+<body>
+<div class="glow" aria-hidden="true"></div>
+<div class="grid" aria-hidden="true"></div>
+<div class="scan" aria-hidden="true"></div>
+
+<div class="shell">
+  <header class="hud">
+    <span class="live">Sistema online</span>
+    <span>Missões disponíveis <b id="count">02</b></span>
+  </header>
+
+  <h1 class="title">Keynotes<span>Mission select</span></h1>
+  <p class="lede">Apresentações interativas em HTML, organizadas por tema. Escolha uma missão para abrir o deck em tela cheia.</p>
+
+  <main>
+    <section class="theme" style="--accent:var(--cyan)" aria-labelledby="t-ia">
+      <div class="theme__head"><span class="idx">01</span><h2 id="t-ia">Engenharia com IA</h2></div>
+      <a class="mission" href="engenharia-com-ia/vibe-coding-sem-doom-loop.html">
+        <span class="mission__code">M01</span>
+        <span class="mission__title">Vibe Coding sem Doom Loop</span>
+        <span class="mission__desc">Origem do vibe coding, doom loop, planejamento, spec-driven development, revisão e depuração. Cockpit 3D, morph entre objetos e notas do apresentador.</span>
+        <span class="mission__meta"><span>56 slides</span><span>7 capítulos</span><span class="go">Decolar ▸</span></span>
+      </a>
+    </section>
+
+    <section class="theme" style="--accent:var(--coral)" aria-labelledby="t-dados">
+      <div class="theme__head"><span class="idx">02</span><h2 id="t-dados">Dados</h2></div>
+      <a class="mission" href="dados/dados-com-claude-code-e-python.html">
+        <span class="mission__code">M02</span>
+        <span class="mission__title">Dados com Claude Code e Python</span>
+        <span class="mission__desc">Apresentação interativa da mentoria de análise de dados com Claude Code e Python. Interface tática em coral, preto e branco.</span>
+        <span class="mission__meta"><span>40 slides</span><span>Mentoria</span><span class="go">Decolar ▸</span></span>
+      </a>
+    </section>
+  </main>
+</div>
+
+<nav class="prompts" aria-label="Atalhos">
+  <span class="key"><kbd>↑↓</kbd>Selecionar</span>
+  <span class="key"><kbd>Enter</kbd>Abrir</span>
+  <a href="https://github.com/felipeAguiarCode/keynotes">Repositório</a>
+</nav>
+
+<script>
+(() => {
+  const missions = [...document.querySelectorAll('.mission')];
+  document.getElementById('count').textContent = String(missions.length).padStart(2, '0');
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+    e.preventDefault();
+    const i = missions.indexOf(document.activeElement);
+    const step = e.key === 'ArrowDown' ? 1 : -1;
+    const next = i === -1 ? (step > 0 ? 0 : missions.length - 1) : (i + step + missions.length) % missions.length;
+    missions[next].focus();
+  });
+})();
+</script>
+</body>
+</html>
